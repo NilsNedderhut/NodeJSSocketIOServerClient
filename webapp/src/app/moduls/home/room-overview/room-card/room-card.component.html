@@ -1,0 +1,5 @@
+<my-mat-card [title]="room">
+    <div *ngFor="let date of data">
+        <p>{{ date.id }}: {{ date.value | round2 }}</p>
+    </div>
+</my-mat-card>

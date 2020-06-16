@@ -1,0 +1,16 @@
+<mat-card class="mat-elevation-z1">
+    <mat-card-header>
+        <mat-card-title>Rooms</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div
+            *ngFor="let key of dataService.getIds()"
+            [routerLink]="getRoomRoute(key)"
+        >
+            <room-card
+                [room]="key"
+                [data]="dataService.getCurrentValues(key)"
+            ></room-card>
+        </div>
+    </mat-card-content>
+</mat-card>

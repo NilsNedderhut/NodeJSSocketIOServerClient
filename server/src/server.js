@@ -1,46 +1,110 @@
-var socketio = require('socket.io');
+const socketio = require("socket.io");
 
-class SocketServer{
+class SocketServer {
+    buffer;
 
-    connections = [];
-
-    constructor(port){
-        this.port = port
+    constructor(server) {
+        this.io = socketio(server);
+        this.buffer = new Buffer(60 * 24);
+        this.buffer.addData({
+            id: "Test",
+            humitiyy: 56,
+        });
     }
 
-    start(){
-        this.io = socketio(this.port);
+    start() {
         this.initIO();
-        console.log(`Server listening on port ${this.port}`);
+        console.log(`Server listening`);
     }
 
-    initIO(){
-        this.io.on('connection', socket => {
-            
-            this.addConnection(socket.id);
+    initIO() {
+        this.webappServer = this.io.of("/webapp");
+        this.sensorServer = this.io.of("/sensor");
 
-            socket.on('data', msg => {
-                console.log(msg);
-            })
+        this.webappServer.on("connection", (socket) => {
+            console.log(
+                `Client connected: ${socket.request.connection.remoteAddress}`
+            );
+            this.sendAllData(socket);
 
-            socket.on('disconnect', () => {
-                this.removeConnection(socket.id);
-            })
+            socket.on("disconnect", () => {
+                console.log(
+                    `Client disconnected: ${socket.request.connection.remoteAddress}`
+                );
+            });
+        });
 
-        })
+        this.sensorServer.on("connection", (socket) => {
+            console.log(
+                `Client connected: ${socket.request.connection.remoteAddress}`
+            );
+
+            socket.on("data", (msg) => {
+                this.buffer.addData(msg);
+                this.webappServer.sockets.emit("dataset", {
+                    id: msg.id,
+                    data: this.buffer.getData(msg.id),
+                });
+            });
+
+            socket.on("disconnect", () => {
+                socket.on("disconnect", () => {
+                    console.log(
+                        `Client disconnected: ${socket.request.connection.remoteAddress}`
+                    );
+                });
+            });
+        });
     }
 
+    sendAllData(socket) {
+        var ids = this.buffer.getAllIds();
+        ids.forEach((id) => {
+            socket.emit("dataset", {
+                id: id,
+                data: this.buffer.getData(id),
+            });
+        });
+    }
+}
 
-    addConnection(id){
-        this.connections.push(id);
-        console.log(`New Connection: ${id}`);
+class Buffer {
+    dataset = {};
+    maxLength;
+
+    constructor(maxLength) {
+        this.maxLength = maxLength;
     }
 
-    removeConnection(id){
-        this.connections.filter(e => e != id);
-        console.log(`Client disconnected: ${id}`);
+    getAllIds() {
+        return Object.keys(this.dataset);
     }
 
+    getData(id) {
+        return this.dataset[id];
+    }
+
+    addData(dataObj) {
+        if (this.dataset[dataObj.id]) {
+            for (const key in dataObj) {
+                if (key != "id")
+                    this.addValueToArray(dataObj.id, key, dataObj[key]);
+            }
+        } else this.initNewID(dataObj);
+    }
+
+    initNewID(dataObj) {
+        this.dataset[dataObj.id] = {};
+        for (const key in dataObj) {
+            if (key != "id") this.dataset[dataObj.id][key] = [dataObj[key]];
+        }
+    }
+
+    addValueToArray(id, key, value) {
+        this.dataset[id][key].push(value);
+        if (this.dataset[id][key].length > this.maxLength)
+            this.dataset[id][key].pop();
+    }
 }
 
 module.exports = SocketServer;

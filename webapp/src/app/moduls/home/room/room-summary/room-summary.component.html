@@ -1,0 +1,39 @@
+<my-mat-card title="Summary">
+    <table mat-table [dataSource]="types">
+        <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+            <mat-cell *matCellDef="let type">{{ type }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="currentValue">
+            <mat-header-cell *matHeaderCellDef>Current Value</mat-header-cell>
+            <mat-cell *matCellDef="let type">{{
+                dataService.getCurrentValue(id, type) | round2
+            }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="average">
+            <mat-header-cell *matHeaderCellDef>Average</mat-header-cell>
+            <mat-cell *matCellDef="let type">{{
+                dataService.getAverage(id, type) | round2
+            }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="maximum">
+            <mat-header-cell *matHeaderCellDef>Maximum</mat-header-cell>
+            <mat-cell *matCellDef="let type">{{
+                dataService.getMaximum(id, type) | round2
+            }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="minimum">
+            <mat-header-cell *matHeaderCellDef>Minimum</mat-header-cell>
+            <mat-cell *matCellDef="let type">{{
+                dataService.getMinimum(id, type) | round2
+            }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </table>
+</my-mat-card>

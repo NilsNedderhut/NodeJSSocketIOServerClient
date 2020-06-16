@@ -1,0 +1,21 @@
+<div *ngIf="dataService.isLoaded() && id">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{ id }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <room-summary
+                [id]="id"
+                [types]="dataService.getTypes(id)"
+            ></room-summary>
+            <div *ngFor="let type of dataService.getTypes(id)">
+                <my-mat-card [title]="type">
+                    <scatter-plot
+                        [title]="type"
+                        [data]="dataService.getArray(id, type)"
+                    ></scatter-plot>
+                </my-mat-card>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
