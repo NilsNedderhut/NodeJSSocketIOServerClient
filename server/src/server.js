@@ -3,18 +3,14 @@ const socketio = require("socket.io");
 class SocketServer {
     buffer;
 
-    constructor(server) {
+    constructor(server, buffer) {
         this.io = socketio(server);
-        this.buffer = new Buffer(60 * 24);
-        this.buffer.addData({
-            id: "Test",
-            humitiyy: 56,
-        });
+        this.buffer = buffer;
     }
 
     start() {
         this.initIO();
-        console.log(`Server listening`);
+        console.log(`Websocket Server initialized`);
     }
 
     initIO() {
@@ -40,11 +36,14 @@ class SocketServer {
             );
 
             socket.on("data", (msg) => {
-                this.buffer.addData(msg);
-                this.webappServer.sockets.emit("dataset", {
-                    id: msg.id,
-                    data: this.buffer.getData(msg.id),
-                });
+                if (msg.hasOwnProperty('id') && msg.hasOwnProperty('data')) {
+                    this.buffer.addData(msg);
+                    this.onNewData(msg.id);
+                }
+                else {
+                    console.warn(`Format of msg ${msg} is wrong: No id or data property`);
+                }
+                
             });
 
             socket.on("disconnect", () => {
@@ -57,54 +56,21 @@ class SocketServer {
         });
     }
 
+    onNewData(id) {
+        let data = this.buffer.getDataObj(id);
+        this.webappServer.emit("dataset", {id, data});
+    }
+
     sendAllData(socket) {
         var ids = this.buffer.getAllIds();
         ids.forEach((id) => {
             socket.emit("dataset", {
                 id: id,
-                data: this.buffer.getData(id),
+                data: this.buffer.getDataObj(id),
             });
         });
     }
 }
 
-class Buffer {
-    dataset = {};
-    maxLength;
-
-    constructor(maxLength) {
-        this.maxLength = maxLength;
-    }
-
-    getAllIds() {
-        return Object.keys(this.dataset);
-    }
-
-    getData(id) {
-        return this.dataset[id];
-    }
-
-    addData(dataObj) {
-        if (this.dataset[dataObj.id]) {
-            for (const key in dataObj) {
-                if (key != "id")
-                    this.addValueToArray(dataObj.id, key, dataObj[key]);
-            }
-        } else this.initNewID(dataObj);
-    }
-
-    initNewID(dataObj) {
-        this.dataset[dataObj.id] = {};
-        for (const key in dataObj) {
-            if (key != "id") this.dataset[dataObj.id][key] = [dataObj[key]];
-        }
-    }
-
-    addValueToArray(id, key, value) {
-        this.dataset[id][key].push(value);
-        if (this.dataset[id][key].length > this.maxLength)
-            this.dataset[id][key].pop();
-    }
-}
 
 module.exports = SocketServer;

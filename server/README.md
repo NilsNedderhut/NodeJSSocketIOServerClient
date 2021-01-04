@@ -61,7 +61,8 @@ After connection the server sends all stored data to the connected client. After
 {
     id: string,
     data: {
-        [key in string]: number[]
-    }
+        type: string,
+        value: number[]
+    }[]
 }
 ```

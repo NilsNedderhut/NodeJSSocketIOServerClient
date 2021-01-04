@@ -8,8 +8,8 @@ export class DataService {
     private dataset = {};
 
     constructor(private websocket: WebsocketService) {
-        websocket.getDataObsv().subscribe((res) => {
-            this.dataset[res.id] = res.data;
+        websocket.getDataObsv().subscribe(({id, data}) => {    
+            this.dataset[id] = data;
         });
     }
 
@@ -22,45 +22,35 @@ export class DataService {
     }
 
     getTypes(id): string[] {
-        return Object.keys(this.dataset[id]);
-    }
-
-    getCurrentValues(id): any {
-        var dataTypes = this.getTypes(id);
-        var ret = [];
-        dataTypes.forEach((dataType) => {
-            var value = this.dataset[id][dataType][
-                this.dataset[id][dataType].length - 1
-            ];
-            ret.push({ id: dataType, value: value });
-        });
-        return ret;
+        return this.dataset[id].map(element => element.type);
     }
 
     getCurrentValue(id, type): number {
-        return this.dataset[id][type][this.dataset[id][type].length - 1];
+        let array = this.getArray(id, type);
+        return array[array.length - 1];
     }
 
     getArray(id, type): number[] {
-        return this.dataset[id][type];
+        return this.dataset[id].find(date => date.type === type).data;
     }
 
     getAverage(id: string, type: string): number {
-        return (
-            this.dataset[id][type].reduce((ret, x) => {
-                return ret + x;
-            }, 0) / this.dataset[id][type].length
-        );
+        let array = this.getArray(id, type);
+        return array.reduce((ret, x) => {
+            return ret + x;
+        }, 0) / array.length;
     }
 
     getMaximum(id: string, type: string): number {
-        return this.dataset[id][type].reduce((ret, x) => {
+        let array = this.getArray(id, type);
+        return array.reduce((ret, x) => {
             return ret > x ? ret : x;
         }, 0);
     }
 
     getMinimum(id: string, type: string): number {
-        return this.dataset[id][type].reduce((ret, x) => {
+        let array = this.getArray(id, type);
+        return array.reduce((ret, x) => {
             return ret < x ? ret : x;
         });
     }

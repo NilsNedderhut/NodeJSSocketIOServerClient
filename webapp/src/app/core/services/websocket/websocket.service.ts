@@ -10,7 +10,7 @@ export class WebsocketService {
 
     constructor() {
         if (isDevMode()) this.socket = io.connect(`http://localhost:80/webapp`);
-        else this.socket = io.connect(`http://${window.location.host}/webapp`);
+        else this.socket = io.connect(`/webapp`);
     }
 
     getDataObsv(): Observable<any> {

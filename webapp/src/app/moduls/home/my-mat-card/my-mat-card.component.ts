@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class MyMatCardComponent implements OnInit {
     @Input() title;
+    @Input() link;
     public isHovered: boolean = false;
 
     constructor() {}

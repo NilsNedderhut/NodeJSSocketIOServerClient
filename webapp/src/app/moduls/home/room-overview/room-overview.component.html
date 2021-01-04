@@ -2,15 +2,11 @@
     <mat-card-header>
         <mat-card-title>Rooms</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
-        <div
-            *ngFor="let key of dataService.getIds()"
-            [routerLink]="getRoomRoute(key)"
-        >
-            <room-card
+    <mat-card-content>     
+            <room-card *ngFor="let key of dataService.getIds()"
+            [link]="getRoomRoute(key)"
                 [room]="key"
-                [data]="dataService.getCurrentValues(key)"
             ></room-card>
-        </div>
+        
     </mat-card-content>
 </mat-card>

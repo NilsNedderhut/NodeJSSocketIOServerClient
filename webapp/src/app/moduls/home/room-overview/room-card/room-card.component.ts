@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DataService } from '../../services/data.service';
 
 @Component({
     selector: 'room-card',
@@ -7,9 +8,9 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class RoomCardComponent implements OnInit {
     @Input() room;
-    @Input() data;
+    @Input() link;
 
-    constructor() {}
+    constructor(public dataService: DataService) {}
 
     ngOnInit(): void {}
 }

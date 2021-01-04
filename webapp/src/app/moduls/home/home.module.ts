@@ -14,6 +14,7 @@ import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 import { PlotlyModule } from 'angular-plotly.js';
 import { HomeComponent } from './home.component';
 import { Round2Pipe } from './round2.pipe';
+import { SummaryTableComponent } from './summary-table/summary-table.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -26,6 +27,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
         MyMatCardComponent,
         ScatterPlotComponent,
         Round2Pipe,
+        SummaryTableComponent,
     ],
     imports: [CommonModule, AppRoutingModule, CoreModule, PlotlyModule],
     bootstrap: [HomeComponent],

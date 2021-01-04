@@ -2,12 +2,6 @@
 
 This project is mainly showing how easy it is to connect many differnt devices and collecting their data inside a network. Here the temperature and humitidy of different rooms is collected and displayed inside a wep application.
 
-The webapp is showing the different rooms with a quick overview of collected data:
-![Overview](/extras/screenshots/overview.png "Overview")
-
-Selecting a room more details and charts are shown:
-![Room Details](/extras/screenshots/details.png "Details")
-
 ## Backend
 
 All of the processes in the backend are running on Node.js, a runtime enviremont for JavaScript.
@@ -27,6 +21,12 @@ That's just a personal preference. First of all I like JavaScript. And since I w
 ## Frontend
 
 The frontend is created with the JS framework Angular. The webapp has only the task to visualize the received data. It was ensured that different rooms and data sets are automatically created based on the data structure, so that the webapp never needs to be adapted unless new features are required.
+
+The webapp is showing the different rooms with a quick overview of collected data:
+![Overview](/extras/screenshots/overview.png "Overview")
+
+Selecting a room more details and charts are shown:
+![Room Details](/extras/screenshots/details.png "Details")
 
 ## Communication
 
