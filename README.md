@@ -2,8 +2,10 @@
 
 This project is mainly showing how easy it is to connect many differnt devices and collecting their data inside a network. Here the temperature and humitidy of different rooms is collected and displayed inside a wep application.
 
-![Overview](/extras/screenshots.png "Overview")
+The webapp is showing the different rooms with a quick overview of collected data:
+![Overview](/extras/screenshots/overview.png "Overview")
 
+Selecting a room more details and charts are shown:
 ![Room Details](/extras/screenshots/details.png "Details")
 
 ## Backend
@@ -32,4 +34,4 @@ The communication between the server and all kind of clients is handled by webso
 
 ### Why Websockets?
 
-For real-time data, websockets are the obvious choice for communication between backend and frontend. Since websockets enable bidirectional communication, data is only sent when new data is available. This also guarantees that the data is up to date on the frontend. Since websockets are already used there, I also chose websockets for the communication between the server and the different clients. However, there is also an interface for a POST request, since no bidirectional communication is necessary.
+For real-time data, websockets are the obvious choice for communication between backend and frontend. Since websockets enable bidirectional communication, data is only sent when new data is available. This also guarantees that the data is up to date on the frontend. Since websockets are already used there, I also chose websockets for the communication between the server and the different clients. However, there is also an interface for a POST request, since no bidirectional communication is necessary. A example is given in the _extras_ directory.
