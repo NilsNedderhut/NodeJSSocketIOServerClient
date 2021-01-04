@@ -10,8 +10,7 @@ class SocketClient{
     }
 
     connect(){
-        this.io = socketio(`${this.address}:${this.port}`);
-        //this.io.on('connect', function(){});
+        this.io = socketio(`${this.address}:${this.port}/sensor`);
         console.log(`Client connected to server on port ${this.port}`);
         
     }
