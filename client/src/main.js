@@ -1,8 +1,34 @@
 Client = require('./client.js');
+var sensor = require("node-dht-sensor");
 
-
-client = new Client('http://localhost', '4500');
+client = new Client('http://192.168.0.23', '80');
 client.connect();
 
-var i = 0;
-setInterval(() => {client.sendData(`Test ${i++}`)}, 3000);
+
+//Sending Data intervally
+setInterval(() => {
+    sensor.read(22, 17, function(err, temperature, humidity) {
+        if (!err) {
+            client.sendData({
+            'id' : 'Living Room',
+            'data': [
+                {
+                    type: 'Temperature',
+                    value: temperature
+                },
+                {
+                    type: 'Humidity',
+                    value: humidity
+                }
+            ]
+            });
+        }
+        else {
+            console.error(err);
+        }
+    });
+}
+, 60000);
+
+
+

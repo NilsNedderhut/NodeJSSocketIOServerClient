@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "node-dht-sensor": "^0.4.2",
     "socket.io-client": "^2.3.0"
   },
   "devDependencies": {},
