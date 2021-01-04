@@ -1,6 +1,6 @@
 # NodeJSSocketIOServerClient
 
-This project is mainly showing how easy it is to connect many differnt devices and collecting their data inside a network. Here the temperature and humitidy of different rooms is collected and displayed inside a wep application.
+This project is mainly showing how easy it is to connect many differnt devices and collecting their data inside a network. Here the temperature and humitidy of different rooms is collected and displayed inside a web application.
 
 ## Backend
 
